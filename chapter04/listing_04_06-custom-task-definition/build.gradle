@@ -21,6 +21,7 @@ ProjectVersion readVersion() {
 }
 
 class ReleaseVersionTask extends DefaultTask {
+    //会在配置期间验证属性值，如果为null会抛出异常TaskValidationException，允许为null，应添加@Optional注解
     @Input Boolean release
     @OutputFile File destFile
 
