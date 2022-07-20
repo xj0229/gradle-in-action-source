@@ -21,6 +21,9 @@ ProjectVersion readVersion() {
 }
 
 task makeReleaseVersion(type: ReleaseVersionTask) {
+    //这里对暴露的两个属性值进行了修改
+    //这样就可以适用于不同的发布版本标识version.prodReady
+    //并且指定不同的版本文件对象，gradle封装了大量自定义类作为常用功能，比如复制，删除文件，创建ZIP归档
     release = version.prodReady
     destFile = new File('project-version.properties')
 }
