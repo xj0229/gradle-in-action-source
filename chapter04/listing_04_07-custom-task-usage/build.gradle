@@ -20,7 +20,10 @@ ProjectVersion readVersion() {
     new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(), versionProps.release.toBoolean())
 }
 
+//定义了一个增强的ReleaseVersionTask类型的task
 task makeReleaseVersion(type: ReleaseVersionTask) {
+    //设置自定义的task属性
+    //增强task的优势在于所暴露的属性可以被单独赋值
     release = version.release
     destFile = versionFile
 }
