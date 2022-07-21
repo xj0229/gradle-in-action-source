@@ -1,3 +1,5 @@
+//gradle的内置task类型都是DefaultTask的派生类，因此，它们可以被构建脚本中的增强task使用。
+
 apply plugin: 'war'
 ext.versionFile = file('version.properties')
 
@@ -29,18 +31,25 @@ task makeReleaseVersion(group: 'versioning', description: 'Makes project a relea
 }
 
 task createDistribution(type: Zip, dependsOn: makeReleaseVersion) {
+    
+    //隐式引用war task的输出
     from war.outputs.files
 
+    //把所有源文件都放到ZIP文件的src目录下
     from(sourceSets*.allSource) {
         into 'src'
     }
 
+    //为ZIP文件添加版本文件
     from(rootDir) {
         include versionFile.name
     }
 }
 
 task backupReleaseDistribution(type: Copy) {
+    
+    //隐式引用createDistribution的输出
+    //这里使用的方法都继承自父类AbstractCopyTask
     from createDistribution.outputs.files
     into "$buildDir/backup"
 }
