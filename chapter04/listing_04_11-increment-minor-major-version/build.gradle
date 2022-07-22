@@ -55,6 +55,7 @@ task incrementMajorVersion(group: 'versioning', description: 'Increments project
     String newVersion = version.toString()
     logger.info "Incrementing major project version: $currentVersion -> $newVersion"
 
+    //使用Ant task的propertyFile来增加属性文件中的特定属性
     ant.propertyfile(file: versionFile) {
         entry(key: 'major', type: 'int', operation: '+', value: 1)
     }
