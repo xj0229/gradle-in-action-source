@@ -1,3 +1,9 @@
+//task规则的命名模式，由两部分组成，task名称的静态部分和一个占位符
+//在本例中，看起来是increment<Classifier>Version
+
+//gradle中一些核心插件也利用了task规则，如java插件定义的task规则，clean<TaskName>
+//运行gradle cleanCompileJava会删除所有产品代码的class文件 
+//
 apply plugin: 'war'
 ext.versionFile = file('version.properties')
 
@@ -49,6 +55,9 @@ task release(dependsOn: backupReleaseDistribution) << {
     logger.quiet 'Releasing the project...'
 }
 
+//首先获得对TaskContainer的引用，然后就可以调用addRule(String, Closure)方法，
+//第一个参数提供了描述信息，比如task命名模式，第二个参数声明了要执行的闭包来应用规则
+//
 tasks.addRule("Pattern: increment<Classifier>Version – Increments the project version classifier.") { String taskName ->
     if (taskName.startsWith('increment') && taskName.endsWith('Version')) {
         task(taskName) << {
