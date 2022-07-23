@@ -55,12 +55,19 @@ task release(dependsOn: backupReleaseDistribution) << {
     logger.quiet 'Releasing the project...'
 }
 
+//当运行gradle tasks会列出具体的task组Rules
+//task规则不能像处理任何其他的简单的task或增强task一样被独立分组。
+//task规则即使通过插件声明了，也将永远显示在Rules组下面。
+
 //首先获得对TaskContainer的引用，然后就可以调用addRule(String, Closure)方法，
 //第一个参数提供了描述信息，比如task命名模式，第二个参数声明了要执行的闭包来应用规则
-//
+//Pattern, 添加带有描述信息的task规则
 tasks.addRule("Pattern: increment<Classifier>Version – Increments the project version classifier.") { String taskName ->
+    //根据预定义模式检查task名称
     if (taskName.startsWith('increment') && taskName.endsWith('Version')) {
+        //给符合命名模式的task动态添加一个doLast方法
         task(taskName) << {
+            //从完整的task名称中提取类型字符串
             String classifier = (taskName - 'increment' - 'Version').toLowerCase()
             String currentVersion = version.toString()
 
