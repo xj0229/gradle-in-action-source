@@ -1,6 +1,12 @@
 import com.manning.gia.ProjectVersion
 import com.manning.gia.ReleaseVersionTask
 
+//gradle在buildSrc目录下使源文件结构标准化
+//这些目录下的代码都会被自动编译，并且被加入到gradle构建脚本的classpath中
+//运行gradle makeReleaseVersion
+
+//有一个要点是，注意task动作和配置代码在构建生命周期的不同阶段执行。
+
 ext.versionFile = file('version.properties')
 project.version = readVersion()
 
