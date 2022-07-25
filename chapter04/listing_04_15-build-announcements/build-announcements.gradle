@@ -1,3 +1,4 @@
+//当project创建好时，执行闭包
 gradle.projectsLoaded { Gradle gradle ->
     gradle.rootProject {
         apply plugin: 'build-announcements'
