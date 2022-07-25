@@ -1,3 +1,14 @@
+//4.3.2实现task执行图监听器
+//通过监听器挂接到构建生命周期只需两个简单的步骤，
+//1.在构建脚本中，编写一个类实现特定的监听器接口
+//2.注册监听器实现
+
+//用于监听task执行图事件的接口是由TaskExecutionGraphListener接口提供的
+//目前，你只需实现一个方法graphPopulate(TaskExecutionGraph)
+
+//注册的时候，监听器可以通过通用的addListener方法或指定监听器类型实例的方法进行注册
+
+
 apply plugin: 'war'
 ext.versionFile = file('version.properties')
 
@@ -26,9 +37,12 @@ class ReleaseVersionListener implements TaskExecutionGraphListener {
 
     @Override
     void graphPopulated(TaskExecutionGraph taskGraph) {
+        //检查releaseTaskPath是否包含在执行图中
         if (taskGraph.hasTask(releaseTaskPath)) {
             List<Task> allTasks = taskGraph.allTasks
+            //在执行图中，从一系列task中找出releaseTask
             Task releaseTask = allTasks.find { it.path == releaseTaskPath }
+            //每个task都知道自己所属的project
             Project project = releaseTask.project
 
             if (!project.version.release) {
@@ -41,6 +55,7 @@ class ReleaseVersionListener implements TaskExecutionGraphListener {
     }
 }
 
+//注册监听器到task执行图
 gradle.taskGraph.addTaskExecutionGraphListener(new ReleaseVersionListener())
 
 task createDistribution(type: Zip) {
