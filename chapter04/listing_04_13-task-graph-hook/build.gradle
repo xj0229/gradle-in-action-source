@@ -1,3 +1,19 @@
+//挂接到构建生命周期
+//有两种方式编写回调生命周期事件，
+//1.在闭包中
+//2.通过Gradle API所提供的监听器接口实现
+//采用监听器实现的最大优势在于该类可以进行单元测试
+//许多生命周期回调方法被定义在Project和Gradle接口中
+
+//Task执行图的内部展示
+//在配置时，Gradle决定了在执行阶段要运行的task的顺序，Task之间的依赖关系被建模为一个有向无环图，DAG
+
+//如何挂接到task执行图
+//当task执行图生成完成后，TaskExecutionGraph提供的whenReady方法会被调用
+
+//通过调用whenReady方法注册一个闭包，扩展了构建脚本
+
+
 apply plugin: 'war'
 ext.versionFile = file('version.properties')
 
@@ -21,7 +37,9 @@ ProjectVersion readVersion() {
     new ProjectVersion(versionProps.major.toInteger(), versionProps.minor.toInteger(), versionProps.release.toBoolean())
 }
 
+//注册的生命周期钩子在task图生成后被调用
 gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
+    //查看执行图中是否包含task release
     if (taskGraph.hasTask(release)) {
         if (!version.release) {
             version.release = true
